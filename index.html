@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevents scrollbars on the body */
+            background-color: #1e1e1e; /* Dark background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        /* Hide the webview until it's loaded */
+        webview {
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        /* Loading spinner styles */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4285F4; /* Google Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader"></div>
+    <webview id="gemini-view" src="https://gemini.google.com/" autosize="on"></webview>
+
+    <script>
+        const webview = document.getElementById('gemini-view');
+        const loader = document.getElementById('loader');
+
+        // When the webview has finished loading, hide the loader and fade in the content.
+        webview.addEventListener('did-finish-load', () => {
+            loader.style.display = 'none';
+            webview.style.opacity = 1;
+        });
+
+        // Optional: If the webview fails to load, show an error message.
+        webview.addEventListener('did-fail-load', (error) => {
+            loader.style.display = 'none';
+            document.body.innerHTML = `<div style="color: #fff; text-align: center;">Failed to load Gemini.<br>Please check your internet connection.</div>`;
+            console.error('Webview failed to load:', error);
+        });
+    </script>
+</body>
+</html>
